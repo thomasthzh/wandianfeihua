@@ -48,6 +48,7 @@ IPv4 由边缘节点接入，IPv6 直接进入核心节点；两条路径共用�
 7. [文档公开与更新流程](docs/06-publication-process.md)：如何脱敏、检查Git内容并维护真实进度。
 8. [macOS 基线与当前 OS 能力](docs/07-macos-and-os-state.md)：窗口总览、真实运行时、验证证据，以及仍需后端或受到浏览器限制的能力。
 9. [钥匙串与多桌面](docs/08-keychain-and-spaces.md)：一次解锁、原站协议适配、真实凭据导入、密钥泄漏回归和合并发布经验。
+10. [桌面体验与开机解锁](docs/09-os-experience-and-unlock.md)：新一轮本地候选的原生认证外观、同一窗口实时总览、Finder、Spotlight 与一次合并发布；新版本公网部署和完整体验验收待完成。
 
 输入示例见 [examples/topology.env.example](examples/topology.env.example)。示例中的 `example.net`、文档 IPv4/IPv6 和 Tailnet 地址都是占位说明，不是可访问的部署。
 
