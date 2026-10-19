@@ -10,6 +10,8 @@
 
 新一轮桌面与原生解锁升级已由本人执行合并入口激活，发行包核验、BFF/身份配置检查、服务启动与自动匿名边界检查返回通过。独立只读复核确认当前发行与三项服务正常，外部 IPv4 六站可信 TLS、认证页及五个受保护入口跳转通过。**本人已确认新版密码＋Authenticator 解锁，正常会话中真实桌面、四原生项目页面、实时总览、文件与搜索工作流已验证。** 各项证据范围与未完项见[桌面体验与开机解锁](docs/09-os-experience-and-unlock.md)，不把历史协议测试或本轮页面观察泛化为全部管理功能。
 
+随后，输入体验升级已由本人部署；独立复核确认当前发行和三项服务正常，既有 SSO 会话自动续接。MCSManager、NetAlertX、Harness 的真实项目页面已分别验证 Ctrl＋K 打开桌面搜索。Zashboard 的旧 Service Worker 仍返回不含输入桥的预缓存首页，最小修复候选将首页缓存版本与受管桥摘要关联，尚待上线验收。为减少后续反复复制提权命令，已完成[本机私密凭据与固定 sudo 动作](docs/11-private-sudo-automation.md)候选；29 项合成检查及 10 个完整登记场景均分别通过 PowerShell 5.1/7。首次真实登记未产生凭据文件，已重新打开隐藏输入窗口，真实登记和自动调用仍待完成。
+
 | 部分 | 已有证据 | 尚需完成 |
 | --- | --- | --- |
 | 桌面体验 | 新版总览往返、第二桌面创建后 Dock 寻回原窗口、后续文件工作中，四个项目 iframe 的实际节点身份保持一致；系统设置实际加载及左右平铺通过 | 完整桌面容量、布局组与全部外观偏好路径继续验收；相同 iframe 不等同 WS 长稳，不声称全部 macOS 效果 |
@@ -51,7 +53,8 @@ IPv4 由边缘节点接入，IPv6 直接进入核心节点；两条路径共用�
 8. [macOS 基线与当前 OS 能力](docs/07-macos-and-os-state.md)：窗口总览、真实运行时、验证证据，以及仍需后端或受到浏览器限制的能力。
 9. [钥匙串与多桌面](docs/08-keychain-and-spaces.md)：一次解锁、原站协议适配、真实凭据导入、密钥泄漏回归和合并发布经验。
 10. [桌面体验与开机解锁](docs/09-os-experience-and-unlock.md)：原生认证外观、实时总览、Finder、Spotlight 与合并发布；本人已解锁，新版正常会话验收与仍待验证的边界。
-11. [全屏、快捷键与右键菜单](docs/10-fullscreen-shortcuts-and-context-menus.md)：下一轮输入体验的原理、有限 iframe 桥接、本地验证与浏览器降级；尚未生产激活，四项目生产验收待完成。
+11. [全屏、快捷键与右键菜单](docs/10-fullscreen-shortcuts-and-context-menus.md)：输入体验的原理、有限 iframe 桥接、本地验证与浏览器降级；已部署，真实项目输入验收继续进行。
+12. [本机私密凭据与固定 sudo 动作](docs/11-private-sudo-automation.md)：隐藏输入、DPAPI 保存、有限审核动作与超时处理；工具测试通过，真实登记与调用待完成。
 
 输入示例见 [examples/topology.env.example](examples/topology.env.example)。示例中的 `example.net`、文档 IPv4/IPv6 和 Tailnet 地址都是占位说明，不是可访问的部署。
 
