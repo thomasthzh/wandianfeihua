@@ -8,6 +8,8 @@
 
 截至 **2026-10-20**：
 
+Linux 与 Windows 的真实设备采集已继续接入桌面。Windows 用户级后台任务与专用系统服务均取得原生采样证据；系统服务还通过独立配置和运行状态读回。设备登记、原通道认证、宿主身份、运行进程、真实采样与重启恢复分别记账，网关托管关系仍逐项核对。安装中的路径重定向、服务已创建但读回失败后的续接，以及源码与真实材料分离的方法见[从设备清单走到真实采集](docs/15-real-fleet-and-windows-services.md)。
+
 台前调度、平铺拖回与 Beszel 原生监控已发布并取得公网证据。既有平铺窗口可拖回浮动；文件与 Beszel 合组、切到 Harness 再整组返回后，搜索仍保留，五个原生项目 iframe 的节点身份没有变化。Beszel 通过服务端钥匙串自动进入既有管理员视图，已显示真实系统的 CPU、内存、磁盘、温度及 CPU 历史曲线；后续升级后既有 SSO 自动回桌面，读数再次可见。**SSE 仍在观察，本轮未实测新 Beszel 连接的锁定关闭，也未完成全部管理写入或 macOS 功能。** 两层认证头冲突、精确子请求隔离、窗口状态和发布教训见[可恢复的窗口、台前调度与原生监控](docs/14-stage-manager-and-native-metrics.md)。
 
 MeshCentral 已接入桌面与服务端加密钥匙串，发布后当前版本与三项服务复核通过。既有 SSO 自动续接，无需再次输入密码；真实窗口显示原生管理员身份，先前失败的脚本和图标均返回成功，控制 WebSocket 握手为 `101`。iframe 内实际 Ctrl＋K 打开 OS Spotlight，白区真实右键出现万点飞花菜单，靠左并排通过。**原生页面当前显示暂无设备组或在线 Agent，因此没有把远程桌面、终端或设备文件操作写成通过；本轮也未重跑真实 Mesh 锁定撤销。** 会话隔离、两次页面故障与修复、精确回退和 Bun 硬链接兼容的经验见[把远程管理接入 OS 的会话边界](docs/13-mesh-native-sessions-and-release.md)。
@@ -70,6 +72,7 @@ IPv4 由边缘节点接入，IPv6 直接进入核心节点；两条路径共用�
 13. [从窗口布局到原生系统应用](docs/12-native-system-apps.md)：窗口几何、弹层与焦点、材料和动效，以及复用钥匙串的受保护原生数据接口。
 14. [把远程管理接入 OS 的会话边界](docs/13-mesh-native-sessions-and-release.md)：MeshCentral 已上线，原生身份、控制握手及桌面输入已验证；记录服务端 Cookie 与不透明句柄、撤销边界、精确回退及公开包硬链接的窄例外，真实设备业务仍待验收。
 15. [可恢复的窗口、台前调度与原生监控](docs/14-stage-manager-and-native-metrics.md)：窗口指针锚点、真实应用组与 iframe 连续性，Beszel 自动身份、双层认证头冲突、SSE 边界与准确发布收据。
+16. [从设备清单走到真实采集](docs/15-real-fleet-and-windows-services.md)：Linux 与 Windows 后台采集、物理路径探针、服务半完成状态续接、网关与宿主身份，以及分层验收。
 
 输入示例见 [examples/topology.env.example](examples/topology.env.example)。示例中的 `example.net`、文档 IPv4/IPv6 和 Tailnet 地址都是占位说明，不是可访问的部署。
 
