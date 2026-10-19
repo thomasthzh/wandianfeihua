@@ -1,6 +1,6 @@
 # 一次解锁、自动进入原项目：钥匙串与多桌面
 
-记录日期：2026-10-19。**钥匙串与多桌面新版已部署，真实凭据已导入，本人已完成新版解锁；三个项目已在临时诊断条件下显示真实页面，第二个修复候选尚未部署。** 本文只公开重新编写的设计与经验，不包含真实凭据、配置、身份记录、生产日志或发布包。
+记录日期：2026-10-19。**第二次浏览器接入修复已部署；正常刷新、无需临时诊断覆盖，四个原生项目均已在桌面窗口显示真实页面，未输入各项目密码。** Zashboard 实际数据流、OS 文件上传下载与新扫描任务也已有现场证据；MCSManager 终端暴露的地址适配缺口仍在下一候选中，尚未部署。本文只公开重新编写的设计与经验，不包含真实凭据、配置、身份记录、生产日志或发布包。
 
 ## 为什么还要做钥匙串
 
@@ -18,6 +18,8 @@
 | NetAlertX | 支持的 Bearer 引导 PHP 会话，原站 Cookie 留在服务端 | 保留原生 CSRF；设置页与 API 也可能返回密码哈希和密钥 |
 | MCSManager | 原生管理员 API key＋明确的 SPA 初始化适配 | 页面获得的是 broker UI handle，不能混称原生登录 token 或 OIDC；终端、文件仍用原生短期 passport |
 | Harness | 按现场安装版本保护固定 Host RPC/WS | 已安装 RC 和最新主分支的浏览器认证协议不同，不能照抄最新版配置 |
+
+状态检查中的 `MISSING` 必须按当前适配器需要的凭据类型解释。本轮三个受管应用使用已存在的 Bearer；可选的 `password`、`oidc-client` 没有被当前路线使用，显示缺失不等于接入失败。现场 Harness 版本本身没有原生浏览器身份层，采用工作区授权模式，由 MFA 和活跃 OS 会话保护固定上游，无需为它虚构一条钥匙串记录；模型提供商密钥继续留在原服务。
 
 这里的依据是官方源码和实际安装版本的代码。参考：[Mihomo 鉴权路由](https://github.com/MetaCubeX/mihomo/blob/Meta/hub/route/server.go)、[NetAlertX 固定版本认证](https://github.com/netalertx/NetAlertX/blob/v26.8.5/front/php/templates/security.php)、[MCSManager 权限中间件](https://github.com/MCSManager/MCSManager/blob/v10.18.0/panel/src/app/middleware/permission.ts)、[Harness 官方协议说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/client/connection/README.md)。最后一项描述当前主分支，不能作为旧 RC 已具备同样能力的证据。
 
@@ -58,13 +60,13 @@
 
 现场的服务器时钟比浏览器所在设备快约 2.5 秒。启动接口已经返回成功，票据格式与固定应用地址也正确，前端却要求服务端的过期时间不能超过“浏览器现在加 30 秒”。服务端刚签发的 30 秒许可，在客户端看来就可能超过这个上限，导致窗口留在接入提示页。
 
-修复候选让浏览器只检查时间戳是正的安全整数，以及票据和目标地址的格式；真正的有效期由服务端时间判断。服务端仍在签发时限定 30 秒、绑定主人会话，并在兑换时检查过期、单次使用与撤销。前端已加入正负约 2.6 秒及正负 24 小时的时钟偏移回归；服务端的过期与重放规则保留。候选测试通过，生产修复尚未部署。
+已部署的修复让浏览器只检查时间戳是正的安全整数，以及票据和目标地址的格式；真正的有效期由服务端时间判断。服务端仍在签发时限定 30 秒、绑定主人会话，并在兑换时检查过期、单次使用与撤销。前端已加入正负约 2.6 秒及正负 24 小时的时钟偏移回归；服务端的过期与重放规则保留。正常刷新后的窗口授权已通过，无需临时调整浏览器计时。
 
 ### 隐私策略会影响跨来源表单的 Origin
 
 一次性许可通过跨来源表单 POST 进入项目窗口。现场 OS 文档的 `no-referrer` 策略使这次导航请求出现 `Origin: null`，从而被精确来源检查拒绝。临时对照将 OS 文档改为 `strict-origin` 后，表单能够携带预期来源；它只发送来源信息，不向项目暴露 OS 页面的路径或查询参数，HTTPS 降级时也不发送 referrer。
 
-这里需要同时核对文档策略、表单导航和 iframe 行为，不能只修改 iframe 的 referrer 属性。来源边界继续限定固定 HTTPS 来源，`null` 不进入允许名单。临时对照已撤销，持久修复纳入下一候选。[Fetch 的 Origin 生成规则](https://fetch.spec.whatwg.org/#append-a-request-origin-header)与 [W3C 的 strict-origin 定义](https://www.w3.org/TR/referrer-policy/#referrer-policy-strict-origin)解释了这两个请求头之间的关联。
+这里需要同时核对文档策略、表单导航和 iframe 行为，不能只修改 iframe 的 referrer 属性。来源边界继续限定固定 HTTPS 来源，`null` 不进入允许名单。临时对照已撤销，正式版本仅为 OS 文档设置 `strict-origin`，API 与身份流程继续保留各自的隐私策略；正常启动已验证。[Fetch 的 Origin 生成规则](https://fetch.spec.whatwg.org/#append-a-request-origin-header)与 [W3C 的 strict-origin 定义](https://www.w3.org/TR/referrer-policy/#referrer-policy-strict-origin)解释了这两个请求头之间的关联。
 
 ### Zashboard 必须按现场版本初始化
 
@@ -74,7 +76,7 @@
 https://zashboard.os.example.invalid/ui/?hostname=zashboard.os.example.invalid&port=443&https=1#/setup
 ```
 
-该版本优先读取文档 query，只有 query 为空时才读取 hash 参数。把参数放在 `#` 前并进行完整导航，可避免只更改已挂载路由的 fragment、没有重新执行初始化的问题。可见表单不会自动同步 URL 参数，因此表单仍显示默认值不能单独证明探测没有执行；应检查实际探测请求与最终应用页面。[固定版本参数解析](https://github.com/Zephyruso/zashboard/blob/v3.18.0/src/helper/utils.ts)和 [SetupPage 初始化](https://github.com/Zephyruso/zashboard/blob/v3.18.0/src/views/SetupPage.vue)是这条配置路线的依据。URL 初始化本身仍不能证明原站已成功进入。
+该版本优先读取文档 query，只有 query 为空时才读取 hash 参数。把参数放在 `#` 前并进行完整导航，可避免只更改已挂载路由的 fragment、没有重新执行初始化的问题。可见表单不会自动同步 URL 参数，因此表单仍显示默认值不能单独证明探测没有执行；应检查实际探测请求与最终应用页面。[固定版本参数解析](https://github.com/Zephyruso/zashboard/blob/v3.18.0/src/helper/utils.ts)和 [SetupPage 初始化](https://github.com/Zephyruso/zashboard/blob/v3.18.0/src/views/SetupPage.vue)是这条配置路线的依据。修复发布后，正常桌面启动已自动进入代理页并显示真实代理组；单独看到 URL 正确仍不能代替这项页面验收。
 
 ### 原生 Authorization 与 MFA 需要分别处理
 
@@ -82,7 +84,15 @@ https://zashboard.os.example.invalid/ui/?hostname=zashboard.os.example.invalid&p
 
 Authelia 的头部认证与 Cookie 会话是不同策略；格式错误的 Authorization 可能在 Cookie 检查前使认证失败。不能把它概括成“所有 Bearer 都优先于 Cookie”：实际行为还取决于头部解析、允许的 scheme 和策略配置。[对应版本的认证策略](https://github.com/authelia/authelia/blob/v4.39.28/internal/handlers/handler_authz_authn.go)及[头部解析](https://github.com/authelia/authelia/blob/v4.39.28/internal/model/authorization.go)支持这一调查方向。
 
-下一候选拟隔离受管应用的原生鉴权头，让 MFA 子请求继续验证 SSO Cookie，项目 broker 再注入它保管的上游凭据。带头超时是现场观察；完整故障链、修复后的自动进入及长连接仍待部署后验收，当前不能写成已经修复。
+本轮已在受管应用的 MFA 前隔离原生鉴权头，让 MFA 继续验证 SSO Cookie，项目 broker 再注入它保管的上游凭据。修复部署后，正常 Zashboard 启动与代理组页面已经通过，四条实际 WebSocket 均完成升级；连接、内存、流量通道收到数据帧，日志通道保持空闲。此前带头超时是现场观察，不能据此把未捕获的 HTTP 认证挑战补写成确定事实；长时间稳定性与退出后的完整撤销仍单独验收。
+
+### 原生终端取得 metadata，还没有证明真实通道可用
+
+继续打开 MCSManager 原生终端时，页面虽取得了真实短期 passport，官方 UI 却仍按返回的旧 daemon 地址和端口建立连接，最终超时。页面显示终端控件、HTTP metadata 成功，均不能代表实际终端已连通。
+
+下一候选只投影三个已审查 passport 接口返回的地址：将已登记的本机 daemon 映射到固定公开 HTTPS 入口，清空原生 prefix 和地址映射，保留原项目生成的短期 password。源地址、端口与根 prefix 必须符合当前固定上游；其他节点或未知地址拒绝，不能借此扩展成任意代理。原生界面的独立节点连接测试仍使用另一份节点配置，不经过这三个 passport，暂未适配。
+
+单个独立诊断页临时对一条响应采用同样投影后，官方原生 UI 的实际 WebSocket 完成升级并收到帧；实例保持停止，没有执行命令。拦截随后清除，诊断页关闭，主桌面回到正常实例列表。**服务器仍运行第二次修复，下一候选尚未部署；这条条件证据不等于生产终端验收通过。** 隔离协议测试还覆盖回传地址驱动的终端连接、原生分片上传下载的哈希回读及撤销，真实项目文件传输仍需另行验收。
 
 ## 本人发布后的实际状态
 
@@ -92,6 +102,8 @@ Authelia 的头部认证与 Cookie 会话是不同策略；格式错误的 Autho
 
 独立 IPv4 检查通过六个站点的可信 TLS 与匿名认证边界，四个应用 broker 均拒绝无许可访问。这证明发布与入口边界已进入运行状态，仍不能代替登录后的原站业务验收。内嵌浏览器曾显示连接关闭，而独立客户端检查正常；这一差异继续用新连接与实际页面核对，不据此直接判定服务故障。
 
-本人已用原密码和 Authenticator 完成新版公网解锁。在临时时钟与文档策略对照条件下，MCSManager 显示真实实例列表及管理员操作入口，NetAlertX 显示真实设备页面，Harness 显示真实工作空间。这些页面证据没有验证所有管理写入，也不能替代持久修复部署后的完整验收。
+本人先前已用原密码和 Authenticator 完成新版公网解锁。第二次修复部署后，页面完整刷新，沿用本人仍有效的 MFA 身份会话，经标准 OIDC 流程返回桌面。没有临时时钟或文档 meta 覆盖，也未输入各项目密码：MCSManager 显示真实实例列表及管理员操作入口，Zashboard 自动进入代理组页面，NetAlertX 显示真实设备表，Harness 显示原生工作空间。
 
-临时时钟与文档 meta 对照均已撤销；第二个修复候选尚未部署。Zashboard 最终正常进入仍待确认。真实终端、上传下载、长连接、锁定与退出后的完整撤销，以及 SMTP 投递和负向 MFA，继续等待对应证据。独立外网 IPv6 请求仍未通过；地址一致、本机监听与本机 TLS 成功都不能替代外部路径验收。
+普通只读核对确认当前修复版已选定、桌面与身份及网关三项服务运行；独立 IPv4 六站可信 TLS、MFA 跳转和四应用匿名 broker 拒绝检查继续通过。OS 文件应用通过真实文件选择器上传了 50 KiB 的非敏感测试文件，下载事件将文件保存到磁盘，SHA-256 与上传源一致；随后新的真实目录扫描任务完成，结果与测试目录的条目和字节数相符。
+
+这些证据分别覆盖四原站页面、Zashboard 实际流以及 OS 文件和扫描任务，没有据此宣称所有管理写入或原站文件传输完成。MCSManager 终端地址修复候选仍待本人部署；完整锁定与注销验收安排在该修复后合并进行，减少重复登录。SMTP 投递、负向 MFA、完整撤销和长时间稳定性仍等待对应证据。独立外网 IPv6 请求仍未通过；地址一致、本机监听与本机 TLS 成功都不能替代外部路径验收。更多节点管理与完整 macOS 交互效果仍按路线图继续实现。
