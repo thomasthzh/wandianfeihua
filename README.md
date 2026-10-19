@@ -10,7 +10,11 @@
 
 新一轮桌面与原生解锁升级已由本人执行合并入口激活，发行包核验、BFF/身份配置检查、服务启动与自动匿名边界检查返回通过。独立只读复核确认当前发行与三项服务正常，外部 IPv4 六站可信 TLS、认证页及五个受保护入口跳转通过。**本人已确认新版密码＋Authenticator 解锁，正常会话中真实桌面、四原生项目页面、实时总览、文件与搜索工作流已验证。** 各项证据范围与未完项见[桌面体验与开机解锁](docs/09-os-experience-and-unlock.md)，不把历史协议测试或本轮页面观察泛化为全部管理功能。
 
-随后，输入体验升级已由本人部署；独立复核确认当前发行和三项服务正常，既有 SSO 会话自动续接。MCSManager、NetAlertX、Harness 的真实项目页面已分别验证 Ctrl＋K 打开桌面搜索。Zashboard 的旧 Service Worker 仍返回不含输入桥的预缓存首页，最小修复候选将首页缓存版本与受管桥摘要关联，尚待上线验收。为减少后续反复复制提权命令，已完成[本机私密凭据与固定 sudo 动作](docs/11-private-sudo-automation.md)候选；29 项合成检查及 10 个完整登记场景均分别通过 PowerShell 5.1/7。首次真实登记未产生凭据文件，已重新打开隐藏输入窗口，真实登记和自动调用仍待完成。
+随后，输入体验升级先由本人部署；缓存修复版再通过获授权工具自动发布，当前版本与三项服务复核通过，既有 SSO 自动返回桌面。MCSManager、NetAlertX、Harness、Zashboard 均重新确认受管桥存在、焦点位于原应用 iframe，并以实际 Ctrl＋K 打开桌面搜索。Zashboard 经原生工具栏正常刷新、首页仍由 Service Worker 缓存返回后，再次通过该检查；完整热键与业务矩阵继续验收。
+
+公网还已有限验证菜单进入全屏、帮助页重复 F11 保持状态、Esc 退出，以及 Ctrl＋Shift＋D 显示桌面和桌面自有右键菜单。当前内置浏览器拒绝增强键盘锁，界面显示真实降级状态；系统与浏览器保留的按键继续遵守宿主边界。
+
+为减少后续反复复制提权命令，[本机私密凭据与固定 sudo 动作](docs/11-private-sudo-automation.md)现已实机启用：本人完成隐藏输入、准确读回和启用，助手独立加载保存值完成只读提权检查、无重启版本复核及一次审核后的自动发布。发布后当前版本与三项服务复核通过，无需本人再复制 sudo 命令。此前跨 PowerShell 宿主的模块加载故障与修复过程保留在教程中；29 项检查、20 个完整场景的双版本 PowerShell 证据与真实调用结果分别记录。
 
 | 部分 | 已有证据 | 尚需完成 |
 | --- | --- | --- |
@@ -53,8 +57,8 @@ IPv4 由边缘节点接入，IPv6 直接进入核心节点；两条路径共用�
 8. [macOS 基线与当前 OS 能力](docs/07-macos-and-os-state.md)：窗口总览、真实运行时、验证证据，以及仍需后端或受到浏览器限制的能力。
 9. [钥匙串与多桌面](docs/08-keychain-and-spaces.md)：一次解锁、原站协议适配、真实凭据导入、密钥泄漏回归和合并发布经验。
 10. [桌面体验与开机解锁](docs/09-os-experience-and-unlock.md)：原生认证外观、实时总览、Finder、Spotlight 与合并发布；本人已解锁，新版正常会话验收与仍待验证的边界。
-11. [全屏、快捷键与右键菜单](docs/10-fullscreen-shortcuts-and-context-menus.md)：输入体验的原理、有限 iframe 桥接、本地验证与浏览器降级；已部署，真实项目输入验收继续进行。
-12. [本机私密凭据与固定 sudo 动作](docs/11-private-sudo-automation.md)：隐藏输入、DPAPI 保存、有限审核动作与超时处理；工具测试通过，真实登记与调用待完成。
+11. [全屏、快捷键与右键菜单](docs/10-fullscreen-shortcuts-and-context-menus.md)：四个真实项目的原站焦点 Ctrl＋K 与正常缓存刷新已验证；完整热键、菜单和全屏矩阵继续验收。
+12. [本机私密凭据与固定 sudo 动作](docs/11-private-sudo-automation.md)：隐藏输入、DPAPI 暂存与启用、有限审核动作与超时处理；本人登记、独立加载及自动发布已实际通过。
 
 输入示例见 [examples/topology.env.example](examples/topology.env.example)。示例中的 `example.net`、文档 IPv4/IPv6 和 Tailnet 地址都是占位说明，不是可访问的部署。
 
